@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mini Game - Number Guessing Game</title>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Pacifico&family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+    <!-- Bootstrap CSS -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        /* Full-Screen Background */
+        /* Body styling */
+        body {
+            font-family: 'Press Start 2P', cursive;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-image: url('background.jpg'); /* Replace with your background image URL */
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            color: white;
+            position: relative; /* Enable absolute positioning for the name */
+        }
+
+        /* Game Container */
+        .game-container {
+            background-color: #2d2d2d;  /* Dark container */
+            padding: 50px;
+            border-radius: 10px;
+            text-align: center;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.5);
+            width: 100%;
+            max-width: 500px; /* Limit the width */
+        }
+
+        /* Game Heading */
+        h2 {
+            font-size: 3rem;
+            color: #ff3333; /* Red text */
+            font-family: 'Pacifico', cursive;
+            margin-bottom: 20px;
+        }
+
+        /* Input Box */
+        .form-control {
+            background-color: #333;
+            color: white;
+            border: 2px solid #ff3333;  /* Red border */
+            font-size: 1.2rem;
+        }
+
+        /* Submit Button */
+        .btn-primary {
+            background-color: #ff3333;
+            border-color: #ff3333;
+            color: white;
+            font-weight: bold;
+            padding: 15px 30px;
+            margin-top: 20px;
+            transition: background-color 0.3s;
+        }
+
+        .btn-primary:hover {
+            background-color: #cc2929;
+            border-color: #cc2929;
+        }
+
+        /* Result & Feedback Text */
+        .result {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #28a745;
+        }
+
+        .alert {
+            margin-top: 20px;
+            display: none;
+        }
+
+        .alert-info {
+            background-color: #ff4d4d; /* Red alert background */
+            color: white;
+        }
+
+        /* Start New Game Button */
+        .btn-secondary {
+            background-color: #333;
+            color: #ff3333;
+            margin-top: 20px;
+            padding: 12px 25px;
+            border: 2px solid #ff3333;
+            font-weight: bold;
+        }
+
+        .btn-secondary:hover {
+            background-color: #ff3333;
+            color: white;
+            border-color: #ff3333;
+        }
+
+        /* Smile & Upset Animations */
+        .smile, .upset {
+            font-size: 80px;
+            display: none;
+            margin-top: 20px;
+            animation-duration: 1s;
+            animation-timing-function: ease-in-out;
+        }
+
+        .smile {
+            animation-name: smileAnim;
+            color: #28a745;
+        }
+
+        .upset {
+            animation-name: upsetAnim;
+            color: #dc3545;
+        }
+
+        /* Smile Animation */
+        @keyframes smileAnim {
+            0% { opacity: 0; transform: scale(0.5); }
+            50% { opacity: 1; transform: scale(1.2); }
+            100% { opacity: 1; transform: scale(1); }
+        }
+
+        /* Upset Animation */
+        @keyframes upsetAnim {
+            0% { opacity: 0; transform: scale(0.5); }
+            50% { opacity: 1; transform: scale(1.2); }
+            100% { opacity: 1; transform: scale(1); }
+        }
+
+        /* Full-Screen View */
+        html, body {
+            height: 100%;
+        }
+
+        /* Make responsive */
+        @media (max-width: 768px) {
+            .game-container {
+                width: 90%;  /* Make game container full-width on small screens */
+            }
+        }
+
+        /* Position the name in the bottom-right corner */
+        .name {
+            position: absolute;
+            bottom: 20px;
+            right: 20px;
+            font-size: 16px;
+            color: white;
+            font-family: 'Roboto', sans-serif;
+            background-color: rgba(0, 0, 0, 0.6);
+            padding: 10px;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="game-container">
+        <h2>Welcome to the Number Guessing Game!</h2>
+        <p>Guess the number between 1 and 100:</p>
+        <input type="number" class="form-control" id="guess" placeholder="Enter a number" min="1" max="100">
+        <button class="btn btn-primary mt-3" onclick="checkGuess()">Submit Guess</button>
+
+        <div id="feedback" class="alert alert-info mt-4"></div>
+
+        <button class="btn btn-secondary mt-4" onclick="resetGame()">Start New Game</button>
+
+        <p class="result" id="result" style="display: none;">Congratulations! You guessed the right number!</p>
+
+        <!-- Smile & Upset Animations -->
+        <div class="smile">😊</div>
+        <div class="upset">😞</div>
+    </div>
+
+    <!-- Bottom-right Name -->
+    <div class="name">Honey</div> <!-- Replace "Your Name" with your actual name -->
+
+    <!-- Bootstrap JS and dependencies -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+    <script>
+        let targetNumber;
+        let attempts = 0;
+
+        function startGame() {
+            targetNumber = Math.floor(Math.random() * 100) + 1;
+            attempts = 0;
+            document.getElementById('feedback').style.display = 'none';
+            document.getElementById('result').style.display = 'none';
+            document.getElementById('guess').value = '';
+            document.querySelector('.smile').style.display = 'none';
+            document.querySelector('.upset').style.display = 'none';
+        }
+
+        function checkGuess() {
+            const userGuess = parseInt(document.getElementById('guess').value);
+            if (isNaN(userGuess) || userGuess < 1 || userGuess > 100) {
+                alert('Please enter a number between 1 and 100!');
+                return;
+            }
+
+            attempts++;
+
+            if (userGuess === targetNumber) {
+                document.getElementById('result').style.display = 'block';
+                document.getElementById('feedback').style.display = 'none';
+                document.querySelector('.smile').style.display = 'block'; // Show smile animation
+            } else {
+                let feedbackText = '';
+                if (userGuess > targetNumber) {
+                    feedbackText = 'Too high! Try again.';
+                } else {
+                    feedbackText = 'Too low! Try again.';
+                }
+
+                document.getElementById('feedback').innerText = feedbackText;
+                document.getElementById('feedback').style.display = 'block';
+                document.querySelector('.upset').style.display = 'block'; // Show upset animation
+            }
+        }
+
+        function resetGame() {
+            startGame();
+        }
+
+        // Initialize the game on page load
+        window.onload = startGame;
+    </script>
+
+</body>
+</html>
+

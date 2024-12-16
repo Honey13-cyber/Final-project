@@ -1,0 +1,145 @@
+*{
+  margin: 0;
+  padding: 0;
+}
+
+.navbar {
+  display: flex;
+  justify-content: flex-end;
+  background-color: #333;
+  padding: 1rem;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+}
+
+.navbar ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+}
+
+.navbar ul li {
+  margin: 0 1rem;
+}
+
+.navbar ul li a {
+  text-decoration: none;
+  color: #fff;
+  font-size: 1.2rem;
+  transition: color 0.3s;
+}
+
+.navbar ul li a:hover {
+  color: #ff6347;
+}
+
+.Skills{
+  margin: 50px;
+  padding: 50px;
+  background-color: antiquewhite;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  border-radius: 50px;
+  border: 5px solid black;
+}
+
+.Intropage{
+  width: 100%;
+  height: 500px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column  ;
+  gap: 100px;
+}
+
+.Intropage img{
+  width: 200px;
+  border-radius: 20px;
+}
+
+.Intropage h4{
+  width: 80%;
+}
+
+.abilities{
+  margin-top: 100px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.abilities h1{
+  border-bottom: 3px solid black;
+}
+
+
+.ability{
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 200px;
+}
+
+.ability1{
+  margin-top: 30px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.ability1 img{
+  width: 100px;
+  border-radius: 50%;
+  height: 100px;
+}
+
+@media (max-width:887px){
+  .ability{grid-template-columns: 1fr 1fr;}
+  .Intropage{
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 80%;
+  }
+}
+
+@media (max-width:552px){
+  .ability{grid-template-columns: 1fr;}
+}
+
+/* Footer Styling */
+.footer {
+  background-color: #333;
+  color: #fff;
+  padding: 1rem;
+  text-align: center;
+  margin-top: 50px;
+}
+
+.footer-content {
+  max-width: 1200px;
+  margin: auto;
+}
+
+.footer p {
+  margin: 0.5rem 0;
+  font-size: 1rem;
+}
+
+.footer ul {
+  list-style: none;
+  padding: 0;
+  display: flex;
+  justify-content: center;
+  gap: 1.5rem;
+}
+
+.footer ul li {
+  margin: 0;
+}
+
